@@ -119,6 +119,9 @@ public abstract class Screen extends Activity {
             String error = null;
             try {
                 store.apply(store.theme(), false);
+                // The launcher's button helper reads its options (Volume fix, the Settings panel) only when it
+                // connects, so reconnect it while it is in use.
+                if (store.wantsHomeHelper()) store.syncHomeHelper();
             } catch (SecurityException e) {
                 error = "Home Settings has no permission to change the launcher (see the README).";
             } catch (Exception e) {
