@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Home Settings</string>
+    <string name="learn_service">Home Settings button learning</string>
+    <string name="learn_service_description">Reads one remote button while Home Settings asks you to press it, then switches itself off.</string>
+</resources>

@@ -23,12 +23,44 @@ not drop the TV off Wi-Fi. The display had a 1920x1080 size override before we s
 Backups of the original state are in `backup/` (package lists, settings, getprop). `tools/disable.sh` also kept
 recovery records in `~/.cleanyourtv/`: keep them, `restore.sh` uses them.
 
-## Ad-blocking DNS
+## Home Settings (the app that changes everything)
 
-The **Ad-blocking DNS** tile (green shield) in the launcher's grid turns Private DNS on or off: OK on
-"Turn off" / "Turn on". On, the TV resolves names through AdGuard DNS (`dns.adguard-dns.com`), which blocks
-many ad and tracker domains. It does **not** block YouTube ads. If an app won't load, turn it off there first.
-Its source is `work/dns-toggle/`; it has no internet permission, only the right to change that one setting.
+Open the **Home Settings** tile (slider icon) in the launcher's grid. Everything below is done there with the
+remote, no computer needed. Your choices live in the app, in one place, and are laid over whichever theme is on:
+a theme only decides the look.
+
+| Row | What it does |
+|---|---|
+| **Theme** | All 32 themes from `themes/`, with previews. OK applies one; **Built-in** is the plain look. Your dock, buttons and options carry over. |
+| **Dock & layout** | Columns (4 to 7 = dock slots), and the dock apps: OK on one moves it left/right, replaces or removes it; **+ Add an app**. |
+| **Remote buttons** | **+ Add a button**, press the remote button (Disney+, for example), then pick what it does: open an app, switch to an HDMI input, Home, Back, mute, sleep, screensaver, TV settings, Wi-Fi settings or nothing, on a press or a hold. OK on a set button changes or removes it. |
+| **Home options** | Clock screensaver after N minutes, date under the clock, Channel buttons do nothing on Home, greeting, green Wi-Fi icon, names under every tile, clock over the wallpaper, Volume fix. Each one cycles Theme's choice → On → Off. |
+| **Ad-blocking DNS** | On: the TV resolves names through AdGuard DNS (`dns.adguard-dns.com`), which blocks many ad and tracker domains. It does **not** block YouTube or Peacock ads (they are stitched into the video). If an app won't load, turn it off here first. |
+
+Changes to the dock, buttons and options are saved at once; Home picks them up when you leave Home Settings.
+
+How it works, for the curious (source: `work/tv-settings/`):
+
+- It writes the launcher's `config.json` (the theme's, with your dock, columns, buttons as `app_keys` and options
+  laid over it) and the theme's pictures through the launcher's own theme provider, the route `tools/theme.sh` uses.
+- The launcher reads that file when Home is built, and Android won't let an app restart Home, so on leaving the app
+  it opens Home and nudges the font scale by 1%, then puts the exact old value back: Android rebuilds Home for each
+  change. The font scale was unset (1.0) before; it is written back as 1.0.
+- Remote buttons are carried out by the launcher's own HomeKeyService (an accessibility helper). Home Settings
+  switches it on while any button is set and off when none is; it also makes the remote's Apps button go Home.
+  If holding volume stops ramping once a button is set, turn on **Home options › Volume fix**.
+- "Add a button" switches on a tiny helper of the app's own (Home Settings button learning) that reads the one
+  press, so it sees buttons the TV's firmware keeps from apps, then switches it off again. Arrows, OK, Back, Home,
+  power and volume can't be remapped.
+- Permissions, both granted once over ADB: `WRITE_SECURE_SETTINGS` (theme provider, DNS, the two helpers) and
+  `WRITE_SETTINGS` (the font-scale nudge). No internet permission.
+- Reinstalling the launcher switches its button helper off; opening Home Settings once puts it back
+  (`work/build-and-install.sh` does that for you).
+
+## Weather
+
+The **Weather** card (from `addons/weather`) shows the weather for one city. Open it once and type the city; Fahrenheit
+is under Weather settings at the bottom of its page. It reads Open-Meteo only while it is on screen.
 
 ## Turning network debugging back on (needed for everything below)
 
@@ -50,45 +82,21 @@ TV_HOST=<tv ip> tools/venv/bin/python tools/tv.py 'pm enable com.hulu.livingroom
 Package names are in the batch files above. A whole batch: `TV_HOST=<tv ip> work/restore.sh batch3`.
 Everything, Google TV home included: `TV_HOST=<tv ip> work/restore.sh`.
 
-## Changing the dock order or apps
+## Rebuilding
 
-Edit `dock_apps` (and `columns` for the number of slots) in
-`launcher/app/src/main/res/values/config.xml`, then rebuild and install:
-
-```bash
-TV_HOST=<tv ip> work/build-and-install.sh launcher
-```
-
-Without a rebuild: on the TV, hold OK on a tile and pick **Move** to reorder it. Long-press the Settings pill
-for Launcher settings (columns, motion, clock).
-
-## Changing the theme or wallpaper
-
-**On the TV, no computer needed:** open the **Themes** tile (purple palette) in the launcher's grid, pick a
-theme with the remote and press OK. Home rebuilds with it in a second or two; your dock and 6 columns stay the
-same in every theme. **Built-in** (first card) goes back to the plain look. All 32 themes from `themes/` are
-inside the app (`work/theme-switcher/`, assets made by `prepare_assets.py`).
-
-How it works: it writes the theme's files into the launcher through the launcher's own theme provider (the
-same route `tools/theme.sh` uses), then nudges the font scale by 1% and puts it straight back, which makes
-Android rebuild the Home screen so it reads the new theme. It holds two permissions, both granted once over ADB:
-`WRITE_SECURE_SETTINGS` (the launcher's provider requires it) and `WRITE_SETTINGS` (the font-scale nudge).
-No internet permission. The font scale was unset (1.0) before; it is written back as 1.0.
-
-From the computer instead (needs network debugging on). See the themes with their screenshots in
-`themes/README.md`, or `tools/venv/bin/python -I tools/manage.py list themes`.
+After changing the launcher's code or `config.xml`, or Home Settings' code:
 
 ```bash
-TV_HOST=<tv ip> work/theme.sh aerial     # push a theme but keep your dock and 6 columns
-TV_HOST=<tv ip> work/theme.sh --reset    # back to the built-in look
+TV_HOST=<tv ip> work/build-and-install.sh            # both
+TV_HOST=<tv ip> work/build-and-install.sh settings   # Home Settings only (also refreshes its themes from themes/)
 ```
 
-`work/theme.sh` copies the theme to `~/cleanyourtv-theme`, puts your dock back in it (many themes bring their own),
-and pushes it with `tools/theme.sh`. For your own wallpaper: put a `wallpaper.jpg` (1920x1080) in that folder
-and run `TV_HOST=<tv ip> tools/theme.sh ~/cleanyourtv-theme`.
+Home Settings keeps your choices across a reinstall. The launcher's own Launcher settings (hold OK on the Settings
+pill) and tile **Move** still work, but Home Settings is the place to change the dock: it rewrites the layout each
+time it applies.
 
-## Remote buttons
+## Remote buttons on this TV
 
 Home, Input, Settings, the Netflix/YouTube/Prime buttons, the mic and held volume all work (checked on the real
-remote). The **Apps** and **Help** buttons do nothing now: they opened the Google TV home and Sony's help app.
-`docs/devices/sony-bravia-4k-vh2-remote-keys.md` describes a fix if you ever want them back.
+remote). The **Help** button does nothing (it opened Sony's help app, now disabled); give it a job in Home Settings ›
+Remote buttons. The **Apps** button goes Home once any button is set there.

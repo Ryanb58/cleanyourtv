@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <!-- Granted once over ADB (pm grant). It lets this app write the launcher's theme files (the launcher's
+         ThemeProvider requires it), switch Private DNS, and switch the launcher's remote-button helper and this
+         app's own button-learning helper on and off in the accessibility list. -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- Granted once with `appops set home.tvsettings WRITE_SETTINGS allow`: a 1% font-scale nudge, put back at
+         once, which makes Android rebuild the Home screen so it reads the new settings. -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- No INTERNET permission: nothing here goes online. -->
+
+    <queries>
+        <package android:name="com.gathin.tvhome" />
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".App"
+        android:allowBackup="false"
+        android:banner="@drawable/banner"
+        android:icon="@drawable/banner"
+        android:label="@string/app_name"
+        android:theme="@style/Screen">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ThemesActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".DockActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".ButtonsActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".OptionsActivity" android:exported="false" android:screenOrientation="landscape" />
+
+        <!-- On only while Remote buttons waits for a press ("Add a button"): it reads which button it was, keycode
+             and scancode, even for buttons the TV's firmware keeps from apps (Sony's app buttons), then this app
+             switches it off again. It swallows nothing otherwise. -->
+        <service
+            android:name=".LearnService"
+            android:exported="true"
+            android:label="@string/learn_service"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/learn_service" />
+        </service>
+    </application>
+</manifest>

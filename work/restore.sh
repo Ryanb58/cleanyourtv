@@ -31,6 +31,7 @@ if [ -z "$ONLY" ] || [ "$ONLY" = dns ]; then
 fi
 
 echo
-echo "Done. The new launcher (com.gathin.tvhome), the DNS switch (home.dnstoggle) and the Themes app (home.themes)"
-echo "are still installed; remove them if you like:  $PY tools/tv.py 'pm uninstall com.gathin.tvhome'  (and the others)."
+echo "Done. The new launcher (com.gathin.tvhome), Home Settings (home.tvsettings) and the Weather card"
+echo "(io.github.sumyabazar1.weather) are still installed; remove them if you like, one per call:"
+echo "  $PY tools/tv.py 'pm uninstall com.gathin.tvhome'"
 echo "Remember to switch network debugging off again afterwards."
