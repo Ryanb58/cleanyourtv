@@ -1,0 +1,13 @@
+# Batch 3: streaming and preloaded apps the owner does not use
+com.google.android.youtube.tvunplugged
+com.google.android.youtube.tvkids
+com.hulu.livingroomplus
+com.wbd.stream
+com.cbs.ott
+tv.pluto.android
+com.gotv.nflgamecenter.us.lite
+com.google.android.videos
+com.sonypicturescore
+com.google.android.play.games
+com.sony.dtv.osat.music
+com.bullbash.huestream

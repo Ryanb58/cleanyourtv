@@ -1,0 +1,3 @@
+# Batch 4: Google TV setup wizard, which claims HOME. Disabled after the new launcher is Home.
+# The Wi-Fi network it owned was forgotten first, so disabling it cannot drop Wi-Fi.
+com.google.android.tungsten.setupwraith

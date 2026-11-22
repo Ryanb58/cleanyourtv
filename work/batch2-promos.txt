@@ -1,0 +1,14 @@
+# Batch 2: demo mode, help tiles, Sony promos and IoT
+com.sony.dtv.demosupport
+com.sony.dtv.demosystemsupport
+com.sony.dtv.multiscreendemo
+com.sony.dtv.customersupport
+com.sony.dtv.smarthelp
+com.sony.dtv.helpguidecontents
+com.sony.dtv.livingfit
+com.sony.dtv.promos
+com.sony.dtv.sonyselect
+com.sony.dtv.sonytab
+android.autoinstalls.config.sony.bravia
+com.sony.dtv.seeds.iot
+com.sony.dtv.seeds.iot.remotestart
