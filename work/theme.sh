@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Push one of the repo's themes, but keep YOUR dock (YouTube, Netflix, Peacock, Apple TV, Prime Video,
+# Push one of the repo's themes, but keep YOUR dock (YouTube, Netflix, Peacock, Apple TV, UniFi Protect,
 # Web Video Caster) and 6 columns: many themes ship their own dock_apps/columns, which would replace yours.
 # The merged copy is written to ~/cleanyourtv-theme (outside the repo) and pushed with tools/theme.sh.
 #
@@ -21,7 +21,7 @@ import json, sys
 p = sys.argv[1]
 c = json.load(open(p))
 c["dock_apps"] = ["com.google.android.youtube.tv", "com.netflix.ninja", "com.peacocktv.peacockandroid",
-                  "com.apple.atve.sony.appletv", "com.amazon.amazonvideo.livingroom",
+                  "com.apple.atve.sony.appletv", "com.ubnt.unifi.protect",
                   "com.instantbits.cast.receiver"]
 c["columns"] = 6
 hidden = c.get("hidden_apps", [])

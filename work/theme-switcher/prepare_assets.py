@@ -8,7 +8,7 @@ small preview.jpg made from screenshot.jpg. themes/default is skipped: "Built-in
 import json, os, re, shutil, subprocess, sys
 
 DOCK = ["com.google.android.youtube.tv", "com.netflix.ninja", "com.peacocktv.peacockandroid",
-        "com.apple.atve.sony.appletv", "com.amazon.amazonvideo.livingroom", "com.instantbits.cast.receiver"]
+        "com.apple.atve.sony.appletv", "com.ubnt.unifi.protect", "com.instantbits.cast.receiver"]
 LIVE_TV = "com.sony.dtv.tvx"
 IMAGE = re.compile(r"^[A-Za-z0-9_.-]+\.(jpg|jpeg|png|webp)$", re.I)
 
