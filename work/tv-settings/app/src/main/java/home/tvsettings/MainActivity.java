@@ -33,6 +33,8 @@ public class MainActivity extends Screen {
         int n = store.buttons().length();
         row("Remote buttons", n == 0 ? "None set" : n + " set", v -> startActivity(new Intent(this, ButtonsActivity.class)));
         row("Home options", null, v -> startActivity(new Intent(this, OptionsActivity.class)));
+        row("Screensaver", ScreensaverActivity.currentName(this),
+                v -> startActivity(new Intent(this, ScreensaverActivity.class)));
         row("Ad-blocking DNS", dnsOn() ? "On" : "Off", v -> { toggleDns(); refresh(); });
     }
 

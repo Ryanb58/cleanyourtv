@@ -33,8 +33,9 @@ a theme only decides the look.
 |---|---|
 | **Theme** | All 32 themes from `themes/`, with previews. OK applies one; **Built-in** is the plain look. Your dock, buttons and options carry over. |
 | **Dock & layout** | Columns (4 to 7 = dock slots), and the dock apps: OK on one moves it left/right, replaces or removes it; **+ Add an app**. |
-| **Remote buttons** | **+ Add a button**, press the remote button (Disney+, for example), then pick what it does: open an app, switch to an HDMI input, Home, Back, mute, sleep, screensaver, TV settings, Wi-Fi settings or nothing, on a press or a hold. OK on a set button changes or removes it. |
-| **Home options** | Clock screensaver after N minutes, date under the clock, Channel buttons do nothing on Home, greeting, green Wi-Fi icon, names under every tile, clock over the wallpaper, Volume fix. Each one cycles Theme's choice → On → Off. |
+| **Remote buttons** | **Settings button opens**: the TV's own menu, or the launcher's quick panel (TV settings, Display, Network, Apps, Launcher settings). **+ Add a button**, press the remote button (Disney+, for example), then pick what it does: open an app, switch to an HDMI input, Home, Back, mute, sleep, screensaver, TV settings, Wi-Fi settings or nothing, on a press or a hold. OK on a set button changes or removes it. |
+| **Home options** | Clock screensaver after N minutes, date under the clock, Channel buttons do nothing on Home, greeting, green Wi-Fi icon, names under every tile, clock over the wallpaper, Volume fix, App library and its pill after the last row. Each one cycles Theme's choice → On → Off. |
+| **Screensaver** | Every installed screensaver (Art Frame, Neon Dream, Koi Pond, the launcher's Clock, Google's Ambient Mode) or Off; **Starts after** 5 to 60 min; **Preview now**; and the chosen one's own settings. These are TV settings, not theme settings. |
 | **Ad-blocking DNS** | On: the TV resolves names through AdGuard DNS (`dns.adguard-dns.com`), which blocks many ad and tracker domains. It does **not** block YouTube or Peacock ads (they are stitched into the video). If an app won't load, turn it off here first. |
 
 Changes to the dock, buttons and options are saved at once; Home picks them up when you leave Home Settings.
@@ -56,6 +57,19 @@ How it works, for the curious (source: `work/tv-settings/`):
   `WRITE_SETTINGS` (the font-scale nudge). No internet permission.
 - Reinstalling the launcher switches its button helper off; opening Home Settings once puts it back
   (`work/build-and-install.sh` does that for you).
+
+## Add-ons installed
+
+- **Weather** (`addons/weather`), Neon Dream (`addons/neon-dream`) and Koi Pond (`addons/koi-pond`): from this repo,
+  built with `tools/docker-build.sh addons/<name>` and installed with `pm install`. Neon Dream and Koi Pond are
+  screensavers; pick them in Home Settings › Screensaver.
+- **Art Frame** (`com.cgogoel.artframe`): third-party, from the `art-frame` branch of github.com/cgogoel/cleanyourtv.
+  Its source was read before building (network only to the museums, NASA, Wikimedia and Unsplash over HTTPS; the phone
+  upload page answers only the home network with a one-time code; no tracking). Kept out of git in `addons/art-frame/`
+  (listed in `.git/info/exclude`). Installed without "display over other apps" (only its TCL-only Wake into art needs
+  it) and without its install script's screensaver change. Three of its nine starter paintings are bundled: the Art
+  Institute of Chicago's server refused the other six (HTTP 403); add art through its own search. The fork's
+  launcher change (`system_wallpaper`) was not taken.
 
 ## Weather
 

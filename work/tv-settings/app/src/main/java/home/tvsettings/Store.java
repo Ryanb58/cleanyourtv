@@ -263,10 +263,15 @@ final class Store {
 
     /**
      * The launcher's HomeKeyService does the remote-button work. It reads the buttons when it connects, so after a
-     * change it is taken off the list and put back; with no buttons set it is switched off, so nothing filters keys.
+     * change it is taken off the list and put back; with nothing for it to do it is switched off, so nothing filters keys.
      */
+    /** The helper is needed while any button is set, or while the Settings button opens the launcher's panel. */
+    boolean wantsHomeHelper() {
+        return buttons().length() > 0 || options().optBoolean("settings_key_panel");
+    }
+
     void syncHomeHelper() {
-        boolean want = buttons().length() > 0;
+        boolean want = wantsHomeHelper();
         if (serviceOn(ctx, HOME_HELPER)) setService(ctx, HOME_HELPER, false);
         if (want) {
             try {
@@ -279,7 +284,7 @@ final class Store {
 
     /** Android takes the helper off the list when the launcher is reinstalled: put it back if buttons are set. */
     void repairHomeHelper() {
-        if (buttons().length() > 0 && !serviceOn(ctx, HOME_HELPER)) {
+        if (wantsHomeHelper() && !serviceOn(ctx, HOME_HELPER)) {
             try {
                 setService(ctx, HOME_HELPER, true);
             } catch (SecurityException ignored) {

@@ -22,6 +22,10 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
         </intent>
+        <!-- The installed screensavers, for the Screensaver screen. -->
+        <intent>
+            <action android:name="android.service.dreams.DreamService" />
+        </intent>
     </queries>
 
     <application
@@ -46,6 +50,7 @@
         <activity android:name=".DockActivity" android:exported="false" android:screenOrientation="landscape" />
         <activity android:name=".ButtonsActivity" android:exported="false" android:screenOrientation="landscape" />
         <activity android:name=".OptionsActivity" android:exported="false" android:screenOrientation="landscape" />
+        <activity android:name=".ScreensaverActivity" android:exported="false" android:screenOrientation="landscape" />
 
         <!-- On only while Remote buttons waits for a press ("Add a button"): it reads which button it was, keycode
              and scancode, even for buttons the TV's firmware keeps from apps (Sony's app buttons), then this app

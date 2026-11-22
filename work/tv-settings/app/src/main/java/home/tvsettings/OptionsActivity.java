@@ -15,6 +15,8 @@ public class OptionsActivity extends Screen {
             {"always_show_names", "Names under every tile"},
             {"clock_wallpaper", "Clock screensaver over the wallpaper"},
             {"volume_pauses_filter", "Volume fix for remote buttons"},
+            {"app_library", "App library (every app; add or remove tiles)"},
+            {"show_library_pill", "App library pill after the last row"},
     };
     private static final int[] IDLE = {-1, 0, 2, 5, 10, 30};
 

@@ -27,7 +27,18 @@ public class ButtonsActivity extends Screen {
 
     @Override
     protected void build() {
-        setNote("Give a remote button a new job: open an app, switch input, mute, sleep and more.");
+        setNote("Give a remote button a new job. While any is set, the Settings button is taken too: choose what it opens.");
+        boolean panel = store.options().optBoolean("settings_key_panel");
+        row("Settings button opens", panel ? "Launcher quick panel" : "TV's own menu", v -> {
+            JSONObject o = store.options();
+            try {
+                if (panel) o.remove("settings_key_panel"); else o.put("settings_key_panel", true);
+            } catch (JSONException ignored) {
+            }
+            store.save();
+            refresh();
+            syncAndApply();
+        });
         row("+  Add a button", null, v -> learn());
         JSONArray b = store.buttons();
         if (b.length() > 0) header("Your buttons");
@@ -174,9 +185,9 @@ public class ButtonsActivity extends Screen {
             try {
                 store.apply(store.theme(), false);
                 store.syncHomeHelper();
-                note = store.buttons().length() > 0
-                        ? "Saved. Try the button now. If holding volume stops repeating, turn on Home options › Volume fix."
-                        : "Saved. No buttons set, so the button helper is off.";
+                note = store.wantsHomeHelper()
+                        ? "Saved. Try it now. If holding volume stops ramping, turn on Home options › Volume fix."
+                        : "Saved. Nothing for the button helper to do, so it is off and the remote is as before.";
             } catch (SecurityException ex) {
                 note = "Home Settings has no permission to change the launcher (see the README).";
             } catch (Exception ex) {
